@@ -25,3 +25,5 @@ config
 bot_db.db
 sheduler.db
 short_id.db
+.idea
+.venv

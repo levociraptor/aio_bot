@@ -15,7 +15,7 @@ async def invitation_to_reply(callback_query: CallbackQuery, state: FSMContext):
     await state.update_data(user_chat_id=callback_query.data[len('reply:'):])
     await callback_query.message.bot.send_message(
         chat_id=settings.bots.admin_id,
-        text=f'Ответ на сообщение:'
+        text='Ответ на сообщение:'
     )
 
 

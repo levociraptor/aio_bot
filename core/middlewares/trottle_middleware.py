@@ -14,7 +14,6 @@ class ThrottleMiddlewares(BaseMiddleware):
         super().__init__()
         self.limit = limit
 
-
     async def __call__(self, handler, event: Message, data: dict):
         user_id = event.from_user.id
         current_time = time.time()

@@ -1,11 +1,11 @@
-from core.database import sqlite
+from core.database import queries
 
 from datetime import datetime, time, timedelta
 
 
 def time_scheduler():
-    if sqlite.check_shedule_post()[0][0]:
-        latest_post_date_timestamp_str = sqlite.get_time_last_post()[0][0]
+    if queries.check_shedule_post()[0][0]:
+        latest_post_date_timestamp_str = queries.get_time_last_post()[0][0]
         latest_post_date = datetime.strptime(latest_post_date_timestamp_str, '%Y-%m-%d %H:%M:%S.%f')
 
         if time(7, 30) > latest_post_date.time() >= time(1, 30):
