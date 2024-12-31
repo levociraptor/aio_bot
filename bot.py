@@ -48,7 +48,7 @@ async def schedule_post(bot: Bot):
                         await bot.send_video(chat_id=settings.bots.channel_link, video=file_id, caption="#мем_из_предложки")
                     else:
                         await bot.send_video(chat_id=settings.bots.channel_link, video=file_id)
-                queries.delete_sent_post(post_id)
+                await queries.delete_sent_post(post_id)
             except Exception as e:
                 print(f"Ошибка при отправке сообщения: {e}")
         await asyncio.sleep(60)
