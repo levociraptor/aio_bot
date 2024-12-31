@@ -16,11 +16,12 @@ def create_table_short_id():
 
 def create_table_scheduler():
     query = """
-        CREATE TABLE IF NOT EXISTS sheduler (
+        CREATE TABLE IF NOT EXISTS scheduler (
         id SERIAL PRIMARY KEY,
         file_id TEXT NOT NULL,
         send_time TIMESTAMP NOT NULL,
-        content_type TEXT NOT NULL
+        content_type TEXT NOT NULL,
+        author TEXT NOT NULL
         )
     """
     return query

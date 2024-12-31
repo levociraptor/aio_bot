@@ -24,7 +24,7 @@ async def create_short_id(short_id, file_id, content_type):
     """
 
     values = (short_id, file_id, content_type)
-    await execute_query(query, values)
+    return await execute_query(query, values)
 
 
 async def create_user(message):
@@ -34,7 +34,7 @@ async def create_user(message):
         VALUES ($1, $2, $3)
     """
     values = (message.from_user.id, message.from_user.full_name, message.from_user.username)
-    await execute_query(query, values)
+    return await execute_query(query, values)
 
 
 async def set_ban(telegram_id, time_to_unban):
@@ -48,7 +48,7 @@ async def set_ban(telegram_id, time_to_unban):
             telegram_id = $2
         """
     values = (time_to_unban, telegram_id,)
-    await execute_query(query, values)
+    return await execute_query(query, values)
 
 
 async def set_unban(telegram_id):
@@ -61,7 +61,7 @@ async def set_unban(telegram_id):
                 telegram_id = $1
             """
     values = (telegram_id,)
-    await execute_query(query, values)
+    return await execute_query(query, values)
 
 
 async def get_time_to_unban(telegram_id):
@@ -71,7 +71,7 @@ async def get_time_to_unban(telegram_id):
         WHERE telegram_id = $1
         """
     values = (telegram_id,)
-    await execute_read_query(query, values)
+    return await execute_read_query(query, values)
 
 
 async def increase_message_counter(telegram_id):
@@ -84,7 +84,7 @@ async def increase_message_counter(telegram_id):
         telegram_id = $1
     """
     values = (telegram_id,)
-    await execute_query(query, values)
+    return await execute_query(query, values)
 
 
 async def increase_approved_message_counter(telegram_id):
@@ -97,7 +97,7 @@ async def increase_approved_message_counter(telegram_id):
         telegram_id = {telegram_id}
     """
 
-    await execute_query(query)
+    return await execute_query(query)
 
 
 async def increase_rejected_message_counter(telegram_id):
@@ -110,21 +110,21 @@ async def increase_rejected_message_counter(telegram_id):
             telegram_id = {telegram_id}
         """
 
-    await execute_query(query)
+    return await execute_query(query)
 
 
-async def add_post_to_sheduler(post_id, send_time, content_type):
+async def add_post_to_scheduler(post_id, send_time, content_type, author):
     query = ("INSERT INTO "
-             "sheduler (file_id, send_time, content_type) "
-             "VALUES ($1, $2, $3)")
-    values = (post_id, send_time, content_type)
-    await execute_query(query, values)
+             "scheduler (file_id, send_time, content_type, author) "
+             "VALUES ($1, $2, $3, $4)")
+    values = (post_id, send_time, content_type, author,)
+    return await execute_query(query, values)
 
 
 async def delete_sent_post(id):
-    query = "DELETE FROM sheduler WHERE id = $1"
+    query = "DELETE FROM scheduler WHERE id = $1"
     values = (id,)
-    await execute_query(query, values)
+    return await execute_query(query, values)
 
 
 async def execute_read_query(query, values=None):
@@ -179,18 +179,18 @@ async def get_file_id(short_id):
     return await result
 
 
-async def check_shedule_post():
-    query = 'SELECT EXISTS(SELECT * FROM sheduler)'
+async def check_schedule_post():
+    query = 'SELECT EXISTS(SELECT * FROM scheduler)'
     return await execute_read_query(query)
 
 
 async def get_time_last_post():
-    query = "SELECT MAX(send_time) FROM sheduler"
+    query = "SELECT MAX(send_time) FROM scheduler"
     return await execute_read_query(query)
 
 
 async def get_posts(time):
-    query = "SELECT id, file_id, content_type FROM sheduler WHERE send_time <= $1"
+    query = "SELECT id, file_id, content_type, author FROM scheduler WHERE send_time <= $1"
     values = (time,)
     return await execute_read_query(query, values)
 
@@ -203,5 +203,5 @@ async def get_content_type(short_id):
 
 
 async def get_posts_quantity():
-    query = 'SELECT COUNT(*) FROM sheduler'
+    query = 'SELECT COUNT(*) FROM scheduler'
     return await execute_read_query(query)

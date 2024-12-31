@@ -3,10 +3,11 @@ from core.database import queries
 from datetime import datetime, time, timedelta
 
 
-def time_scheduler():
-    if queries.check_shedule_post()[0][0]:
-        latest_post_date_timestamp_str = queries.get_time_last_post()[0][0]
-        latest_post_date = datetime.strptime(latest_post_date_timestamp_str, '%Y-%m-%d %H:%M:%S.%f')
+async def time_scheduler():
+    is_exists_post = await queries.check_schedule_post()
+    if is_exists_post[0][0]:
+        latest_post_date = await queries.get_time_last_post()
+        latest_post_date = latest_post_date[0][0]
 
         if time(7, 30) > latest_post_date.time() >= time(1, 30):
             send_time = latest_post_date.replace(hour=7)

@@ -20,9 +20,10 @@ async def post_content(callback_query: CallbackQuery):
     post_id = await queries.get_file_id(short_id)
     post_id = post_id[0][0]
     content_type = await queries.get_content_type(short_id)
-    send_time = time_scheduler()
+    send_time = await time_scheduler()
     try:
-        await queries.add_post_to_sheduler(post_id, send_time, content_type[0][0])
+        author = "user"
+        await queries.add_post_to_scheduler(post_id, send_time, content_type[0][0], author)
         await callback_query.bot.send_message(
             chat_id=settings.bots.admin_id,
             text=f'Мем добавлен в отложку на время {send_time}'

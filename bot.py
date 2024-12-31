@@ -36,12 +36,18 @@ async def schedule_post(bot: Bot):
         posts = await queries.get_posts(time)
         print(posts)
         for post in posts:
-            post_id, file_id, content_type = post
+            post_id, file_id, content_type, author = post
             try:
                 if content_type == 'photo':
-                    await bot.send_photo(chat_id=settings.bots.channel_link, photo=file_id)
+                    if author == "user":
+                        await bot.send_photo(chat_id=settings.bots.channel_link, photo=file_id, caption="#мем_из_предложки")
+                    else:
+                        await bot.send_photo(chat_id=settings.bots.channel_link, photo=file_id)
                 elif content_type == 'video':
-                    await bot.send_video(chat_id=settings.bots.channel_link, video=file_id)
+                    if author == "user":
+                        await bot.send_video(chat_id=settings.bots.channel_link, video=file_id, caption="#мем_из_предложки")
+                    else:
+                        await bot.send_video(chat_id=settings.bots.channel_link, video=file_id)
                 queries.delete_sent_post(post_id)
             except Exception as e:
                 print(f"Ошибка при отправке сообщения: {e}")
@@ -63,7 +69,7 @@ async def start():
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
 
-    #asyncio.create_task(schedule_post(bot))
+    asyncio.create_task(schedule_post(bot))
 
     try:
         await dp.start_polling(bot, skip_updates=True)
