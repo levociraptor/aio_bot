@@ -17,7 +17,7 @@ async def get_time_last_schedule_message(message: Message):
 
 @router.message(F.from_user.id == settings.bots.admin_id, F.text == 'Получить количество постов в отложке')
 async def get_posts_quantity(message: Message):
-    quantity_posts = queries.get_posts_quantity()
+    quantity_posts = await queries.get_posts_quantity()
     await message.answer(str(quantity_posts[0][0]))
 
 
@@ -31,11 +31,11 @@ async def get_ban_users(message: Message):
                 text=f"Пользователь: {user[2]} \n"
                     f"C ID: {user[1]}"
             )
-    else: 
+    else:
         await message.bot.send_message(
                 chat_id=settings.bots.admin_id,
                 text=f"Нет забанненых пользователей")
-        
+
 
 @router.message(F.from_user.id == settings.bots.admin_id, F.text.startswith('/unban'))
 async def unban_user(message: Message):

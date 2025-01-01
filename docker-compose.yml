@@ -11,7 +11,8 @@ services:
       - db
     restart: always
     environment:
-      DATABASE_URL: ${CONNECTION_LINK}
+      - TZ=Europe/Ulyanovsk
+      - DATABASE_URL=${CONNECTION_LINK}
     volumes:
       - .:/app
     command: python3 -m bot
